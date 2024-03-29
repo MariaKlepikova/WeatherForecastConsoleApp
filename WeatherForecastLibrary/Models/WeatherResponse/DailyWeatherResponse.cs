@@ -8,6 +8,9 @@ public class DailyWeatherResponse
 }
 public class DailyForecast
 {
+    [JsonPropertyName("time")]
+    public DateTimeOffset[] Time { get; set; }
+    
     [JsonPropertyName("temperature_2m_max")]
     public double[] MaxTemperature { get; set; }
 
@@ -19,4 +22,10 @@ public class DailyForecast
 
     [JsonPropertyName("sunset")]
     public string[] Sunset { get; set; }
+    
+    [JsonPropertyName("precipitation_probability_max")]
+    public double[] PrecipitationProbability { get; set; }
+
+    [JsonPropertyName("wind_speed_10m_max")]
+    public double[] WindSpeed { get; set; }
 }
