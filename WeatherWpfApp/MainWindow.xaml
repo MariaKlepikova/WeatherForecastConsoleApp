@@ -4,9 +4,281 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WeatherWpfApp"
+        xmlns:viewModels="clr-namespace:WeatherWpfApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewModels:CurrentWeatherViewModel}" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Прогноз погоды" Height="685" Width="995" Background="LightYellow"
+        WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" FontFamily="Cambria">
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+
+        <Border 
+                CornerRadius="15" Background="White" 
+                Grid.Row="0" Grid.Column="0"
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                BorderThickness="3" BorderBrush="Gray" Margin="16,16,16,8">
+
+            <StackPanel Orientation="Horizontal" 
+                        Width="auto" Height="auto">
+
+                <Button
+                        Width="27" Height="27" 
+                        Margin="25,9,5,9" 
+                        Command="{Binding ClickCommand}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Images/search.png"/>
+                    </Button.Background>
+                    <!--Content="{Binding ClickContent}"-->
+                </Button>
+                <TextBox Height="30" MinWidth="200" BorderBrush="Gray"
+                         Margin="9,9,9,9" HorizontalAlignment="Stretch">
+                </TextBox>
+            </StackPanel>
+        </Border>
+
+        <Border CornerRadius="15" Background="White"
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                BorderThickness="3" BorderBrush="Gray" Margin="16,8,16,16"
+                Grid.Row="1" Grid.Column="0">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="2.75*"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="1.5*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label x:Name="NameOfCityLabel"
+                       FontSize="24" FontWeight="SemiBold"
+                       HorizontalContentAlignment="Center"
+                       Content="Санкт-Петербург"
+                       Grid.Row="0"
+                       VerticalAlignment="Bottom"/>
+                <!--Content="{Binding Path=NameOfCity}"-->
+
+                <Label x:Name="DateLabel" 
+                       FontSize="18" FontWeight="SemiBold"
+                       HorizontalContentAlignment="Center" VerticalContentAlignment="Top"
+                       Content="05 апреля, пятница"
+                       Grid.Row="1"
+                       VerticalAlignment="Center"/>
+                <!--Content="{Binding Path=Date}"-->
+
+                <Image Source="/Images/006-snow.png"
+                       RenderOptions.BitmapScalingMode="HighQuality"
+                       Grid.Row="2"
+                       VerticalAlignment="Center"/>
+
+                <Label x:Name="WeatherTypeLabel"
+                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                       FontSize="23" Foreground="DimGray"
+                       Content="облачно с прояснениями"
+                       Grid.Row="3"/>
+                <!--Content="{Binding Path=WeatherType}"-->
+
+                <Label x:Name="TemperatureLabel"
+                       FontSize="55"
+                       HorizontalContentAlignment="Center" VerticalContentAlignment="Top"
+                       Content="1 °C"
+                       Grid.Row="4"/>
+                <!--Content="{Binding Path=Temperature}"-->
+
+                <Grid Grid.Row="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Image Source="/Images/008-thermometer-1.png" 
+                           Grid.Row="0" Grid.Column="0" Margin="0,10,0,0"/>
+
+                    <Label Content="2 °C"
+                           FontWeight="SemiBold"
+                           Grid.Row="1" Grid.Column="0"
+                           VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                           FontSize="32"/>
+                    <!--Content="{Binding Path=MaxTemperature}"-->
+
+                    <Image Source="/Images/007-thermometer.png"
+                           Grid.Row="0" Grid.Column="1" Margin="0,10,0,0"/>
+
+                    <Label Content="-4 °C"
+                           FontWeight="SemiBold"
+                           Grid.Row="1" Grid.Column="1"
+                           VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                           FontSize="32"/>
+                    <!--Content="{Binding Path=MinTemperature}"-->
+
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border
+                CornerRadius="15" Background="White" 
+                Grid.Row="0" Grid.Column="0"
+                BorderThickness="3" BorderBrush="Gray" Margin="16,8,16,16">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Ветер"
+                           Grid.Row="0"
+                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                           FontSize="24" Foreground="DimGray"/>
+
+                    <Image Source="/Images/009-windy.png"
+                           Grid.Row="1"/>
+
+                    <Label
+                        Content="6 м/с"
+                        FontWeight="SemiBold"
+                        Grid.Row="2"
+                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        FontSize="32"/>
+                    <!--Content="{Binding Path=WindSpeed}"-->
+                </Grid>
+            </Border>
+
+            <Border
+                CornerRadius="15" Background="White" 
+                Grid.Row="0" Grid.Column="1"
+                BorderThickness="3" BorderBrush="Gray" Margin="16,8,16,16">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Влажность"
+                             Grid.Row="0"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             FontSize="24" Foreground="DimGray"/>
+
+                    <Image Source="/Images/012-humidity.png"
+                           Grid.Row="1"/>
+
+                    <Label
+                        Content="85 %"
+                        FontWeight="SemiBold"
+                        Grid.Row="2"
+                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        FontSize="32"/>
+                    <!--Content="{Binding Path=RelativeHumidity}"-->
+                </Grid>
+            </Border>
+
+            <Border
+                CornerRadius="15" Background="White" 
+                Grid.Row="1" Grid.Column="0"
+                BorderThickness="3" BorderBrush="Gray" Margin="16,8,16,16">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Вероятность осадков"
+                             Grid.Row="0"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             FontSize="24" Foreground="DimGray"/>
+
+                    <Image Source="Images/013-precipitation.png"
+                           Grid.Row="1"/>
+
+                    <Label
+                        Content="99 %"
+                        FontWeight="SemiBold"
+                        Grid.Row="2"
+                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        FontSize="32"/>
+                    <!--Content="{Binding Path=PrecipitationProbability}"-->
+                </Grid>
+            </Border>
+
+            <Border
+                CornerRadius="15" Background="White" 
+                Grid.Row="1" Grid.Column="1"
+                BorderThickness="3" BorderBrush="Gray" Margin="16,8,16,16">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="2.5*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Восход и закат"
+                             Grid.Row="0"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             FontSize="24" Foreground="DimGray"/>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Image Source="/Images/010-sunrise.png"
+                               Grid.Column="0" Grid.Row="0"/>
+
+                        <Image Source="/Images/011-sunset.png"
+                               Grid.Column="1" Grid.Row="0"/>
+
+                        <Label Content="6:10"
+                               Grid.Row="1" Grid.Column="0"
+                               FontWeight="SemiBold" FontSize="32"
+                               VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <!--Content="{Binding Path=Sunrise}"-->
+
+                        <Label Content="19:52"
+                               Grid.Row="1" Grid.Column="1"
+                               FontWeight="SemiBold" FontSize="32"
+                               VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <!--Content="{Binding Path=Sunset}"-->
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+
+        </Grid>
 
     </Grid>
+
 </Window>
