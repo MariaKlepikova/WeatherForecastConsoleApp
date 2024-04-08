@@ -10,7 +10,7 @@ namespace WeatherForecastLibrary.Models;
     public class CurrentForecast
     {
         [JsonPropertyName("time")]
-        public string Time { get; set; }
+        public DateTime Time { get; set; }
 
         [JsonPropertyName("temperature_2m")]
         public double Temperature { get; set; }
@@ -18,7 +18,16 @@ namespace WeatherForecastLibrary.Models;
         [JsonPropertyName("relative_humidity_2m")]
         public int RelativeHumidity { get; set; } //относительная влажность
 
-        [JsonPropertyName("wind_speed_10m")]
+        [JsonPropertyName("rain")]
+        public double Rain { get; set; }
+
+        [JsonPropertyName("snowfall")]
+        public double Snowfall { get; set; }
+
+        [JsonPropertyName("cloud_cover")]
+        public double CloudCover { get; set; }
+
+	[JsonPropertyName("wind_speed_10m")]
         public double WindSpeed { get; set; }
     }
 
