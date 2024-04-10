@@ -8,4 +8,45 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="006-snow.png" />
+      <None Remove="007-thermometer.png" />
+      <None Remove="008-thermometer-1.png" />
+      <None Remove="009-windy.png" />
+      <None Remove="010-sunrise.png" />
+      <None Remove="011-sunset.png" />
+      <None Remove="012-humidity.png" />
+      <None Remove="013-precipitation.png" />
+      <None Remove="Images\006-snow.png" />
+      <None Remove="Images\007-thermometer.png" />
+      <None Remove="Images\008-thermometer-1.png" />
+      <None Remove="Images\009-windy.png" />
+      <None Remove="Images\010-sunrise.png" />
+      <None Remove="Images\011-sunset.png" />
+      <None Remove="Images\012-humidity.png" />
+      <None Remove="Images\013-precipitation.png" />
+      <None Remove="Images\search.png" />
+      <None Remove="search.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WeatherForecastLibrary\WeatherForecastLibrary.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Images\006-snow.png" />
+      <Resource Include="Images\007-thermometer.png" />
+      <Resource Include="Images\008-thermometer-1.png" />
+      <Resource Include="Images\009-windy.png" />
+      <Resource Include="Images\010-sunrise.png" />
+      <Resource Include="Images\011-sunset.png" />
+      <Resource Include="Images\012-humidity.png" />
+      <Resource Include="Images\013-precipitation.png" />
+      <Resource Include="Images\search.png" />
+    </ItemGroup>
+
 </Project>

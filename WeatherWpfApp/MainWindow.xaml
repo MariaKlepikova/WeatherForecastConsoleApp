@@ -32,14 +32,17 @@
                 <Button
                         Width="27" Height="27" 
                         Margin="25,9,5,9" 
-                        Command="{Binding ClickCommand}">
+                        Command="{Binding ClickCommand}"
+                        BorderBrush="White">
                     <Button.Background>
                         <ImageBrush ImageSource="/Images/search.png"/>
                     </Button.Background>
                     <!--Content="{Binding ClickContent}"-->
                 </Button>
                 <TextBox Height="30" MinWidth="200" BorderBrush="Gray"
-                         Margin="9,9,9,9" HorizontalAlignment="Stretch">
+                         Margin="9,9,9,9" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                         FontSize="18" Foreground="DimGray"
+                         Text="Поиск">
                 </TextBox>
             </StackPanel>
         </Border>
@@ -62,7 +65,7 @@
                 <Label x:Name="NameOfCityLabel"
                        FontSize="24" FontWeight="SemiBold"
                        HorizontalContentAlignment="Center"
-                       Content="Санкт-Петербург"
+                       Content="{Binding Path=NameOfCity}"
                        Grid.Row="0"
                        VerticalAlignment="Bottom"/>
                 <!--Content="{Binding Path=NameOfCity}"-->
@@ -70,27 +73,28 @@
                 <Label x:Name="DateLabel" 
                        FontSize="18" FontWeight="SemiBold"
                        HorizontalContentAlignment="Center" VerticalContentAlignment="Top"
-                       Content="05 апреля, пятница"
+                       Content="{Binding Path=Date}"
                        Grid.Row="1"
                        VerticalAlignment="Center"/>
                 <!--Content="{Binding Path=Date}"-->
 
-                <Image Source="/Images/006-snow.png"
+                <Image Source="{Binding Path=WeatherIcon}"
                        RenderOptions.BitmapScalingMode="HighQuality"
                        Grid.Row="2"
                        VerticalAlignment="Center"/>
+                <!--Source="/Images/006-snow.png"-->
 
                 <Label x:Name="WeatherTypeLabel"
                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                        FontSize="23" Foreground="DimGray"
-                       Content="облачно с прояснениями"
+                       Content="{Binding Path=TextDescription}"
                        Grid.Row="3"/>
-                <!--Content="{Binding Path=WeatherType}"-->
+                <!--Content="{Binding Path=TextDescription}"-->
 
                 <Label x:Name="TemperatureLabel"
                        FontSize="55"
                        HorizontalContentAlignment="Center" VerticalContentAlignment="Top"
-                       Content="1 °C"
+                       Content="{Binding Path=Temperature}"
                        Grid.Row="4"/>
                 <!--Content="{Binding Path=Temperature}"-->
 
@@ -107,7 +111,7 @@
                     <Image Source="/Images/008-thermometer-1.png" 
                            Grid.Row="0" Grid.Column="0" Margin="0,10,0,0"/>
 
-                    <Label Content="2 °C"
+                    <Label Content="{Binding Path=MaxTemperature}"
                            FontWeight="SemiBold"
                            Grid.Row="1" Grid.Column="0"
                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -117,7 +121,7 @@
                     <Image Source="/Images/007-thermometer.png"
                            Grid.Row="0" Grid.Column="1" Margin="0,10,0,0"/>
 
-                    <Label Content="-4 °C"
+                    <Label Content="{Binding Path=MinTemperature}"
                            FontWeight="SemiBold"
                            Grid.Row="1" Grid.Column="1"
                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -159,7 +163,7 @@
                            Grid.Row="1"/>
 
                     <Label
-                        Content="6 м/с"
+                        Content="{Binding Path=WindSpeed}"
                         FontWeight="SemiBold"
                         Grid.Row="2"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -189,7 +193,7 @@
                            Grid.Row="1"/>
 
                     <Label
-                        Content="85 %"
+                        Content="{Binding Path=RelativeHumidity}"
                         FontWeight="SemiBold"
                         Grid.Row="2"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -215,11 +219,11 @@
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              FontSize="24" Foreground="DimGray"/>
 
-                    <Image Source="Images/013-precipitation.png"
+                    <Image Source="/Images/013-precipitation.png"
                            Grid.Row="1"/>
 
                     <Label
-                        Content="99 %"
+                        Content="{Binding Path=PrecipitationProbability}"
                         FontWeight="SemiBold"
                         Grid.Row="2"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -260,13 +264,13 @@
                         <Image Source="/Images/011-sunset.png"
                                Grid.Column="1" Grid.Row="0"/>
 
-                        <Label Content="6:10"
+                        <Label Content="{Binding Path=Sunrise}"
                                Grid.Row="1" Grid.Column="0"
                                FontWeight="SemiBold" FontSize="32"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                         <!--Content="{Binding Path=Sunrise}"-->
 
-                        <Label Content="19:52"
+                        <Label Content="{Binding Path=Sunset}"
                                Grid.Row="1" Grid.Column="1"
                                FontWeight="SemiBold" FontSize="32"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>

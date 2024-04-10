@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using WeatherForecastLibrary;
 using WeatherForecastLibrary.Models;
 using WeatherWpfApp.Commands;
@@ -16,6 +20,91 @@ namespace WeatherWpfApp.ViewModels
 		 *   3. Вызываю метод из библиотеки и получаю ответ
 		 *   4. Из полученного ответа заполняю проперти вьюмодели, чтобы значения отобразились на вью
 		 */
+
+		private readonly Dictionary<Precipitation, WeatherType> _weatherIcons; 
+
+		public CurrentWeatherViewModel()
+		{
+			ClickCommand = new LambdaCommand(
+				new Action<object>(param => OnClickExecuted(param)),
+				new Func<object, bool>(param => CanClickExecute(param))
+			);
+
+			_weatherIcons = new Dictionary<Precipitation, WeatherType>()
+			{
+				{ 
+					Precipitation.Clearly, new WeatherType()
+					{
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\001-sunny.png", UriKind.Absolute)),
+						TextDescription = "ясно"
+					}
+				},
+
+				{
+					Precipitation.Cloudy, new WeatherType()
+					{
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\002-cloudy.png", UriKind.Absolute)),
+						TextDescription = "облачно"
+					}
+				},
+
+				{
+					Precipitation.PartlyCloudy, new WeatherType()
+					{
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\003-cloudy-1.png", UriKind.Absolute)),
+						TextDescription = "облачно с прояснениями"
+					}
+				},
+
+				{
+					Precipitation.Rain, new WeatherType()
+					{
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\004-rainy-day.png", UriKind.Absolute)),
+						TextDescription = "небольшой дождь"
+					}
+				},
+
+				{
+					Precipitation.Shower, new WeatherType()
+					{
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\005-rainy-day-1.png", UriKind.Absolute)),
+						TextDescription = "ливень"
+					}
+				},
+
+				{
+					Precipitation.Snow, new WeatherType()
+					{
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\006-snow.png", UriKind.Absolute)),
+						TextDescription = "снег"
+					}
+				},
+			};
+		}
+
+		private ImageSource _weatherIcon;
+
+		public ImageSource WeatherIcon
+		{
+			get => _weatherIcon;
+			set
+			{
+				_weatherIcon = value;
+				OnPropertyChanged(nameof(WeatherIcon));
+			}
+		}
+
+		private string _textDescription;
+
+		public string TextDescription
+		{
+			get => _textDescription;
+			set
+			{
+				_textDescription = value;
+				OnPropertyChanged(nameof(TextDescription));
+			}
+		}
 
 		private string _nameOfCity;
 
@@ -138,18 +227,6 @@ namespace WeatherWpfApp.ViewModels
 			}
 		}
 
-		private Precipitation _weatherType;
-
-		public Precipitation WeatherType
-		{
-			get { return _weatherType; }
-			set
-			{
-				_weatherType = value;
-				OnPropertyChanged(nameof(WeatherType));
-			}
-		}
-
 		private string _clickContent;
 		public string ClickContent
 		{
@@ -163,13 +240,6 @@ namespace WeatherWpfApp.ViewModels
 
 		public ICommand ClickCommand { get; }
 
-		public CurrentWeatherViewModel()
-		{
-			ClickCommand = new LambdaCommand(
-				new Action<object>(param => OnClickExecuted(param)),
-				new Func<object, bool>(param => CanClickExecute(param))
-			);
-		}
 
 		private Random Rnd { get; } = new Random();
 		private void OnClickExecuted(object sender)
@@ -195,7 +265,7 @@ namespace WeatherWpfApp.ViewModels
 
 			Temperature = currentWeather.CurrentForecast.Temperature.ToString("#0 '°C'");
 
-			PrecipitationProbability = dailyWeather.DailyForecast.PrecipitationProbability[0].ToString("## '%'");
+			PrecipitationProbability = dailyWeather.DailyForecast.PrecipitationProbability[0].ToString("##");
 
 			MaxTemperature = dailyWeather.DailyForecast.MaxTemperature[0].ToString("## '°C'");
 
@@ -203,13 +273,19 @@ namespace WeatherWpfApp.ViewModels
 
 			WindSpeed = currentWeather.CurrentForecast.WindSpeed.ToString("##,# м/с");
 
-			RelativeHumidity = currentWeather.CurrentForecast.RelativeHumidity.ToString("## '%'");
+			RelativeHumidity = currentWeather.CurrentForecast.RelativeHumidity.ToString("##");
 
 			Sunrise = dailyWeather.DailyForecast.Sunrise[0].ToString("t");
 
 			Sunset = dailyWeather.DailyForecast.Sunset[0].ToString("t");
 
-			WeatherType = weatherApiClient.TranscribeStateOfPrecipitation(currentWeather);
+			var typeOfPrecipitation = weatherApiClient.TranscribeStateOfPrecipitation(currentWeather);
+
+			var currentWeatherType = _weatherIcons[typeOfPrecipitation];
+
+			WeatherIcon = currentWeatherType.IconSource;
+
+			TextDescription = currentWeatherType.TextDescription;
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged; 
