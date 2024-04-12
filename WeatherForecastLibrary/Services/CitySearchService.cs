@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Xml.Linq;
 using WeatherForecastLibrary.Models;
 
 namespace WeatherForecastLibrary.Services;
@@ -7,7 +8,7 @@ public class CitySearchService
 {
     private readonly HttpClient _httpClient = new();
 
-    public async Task<CitySearchResponse[]> SearchCities(string userInput)
+    private async Task<CitySearchResponse[]> SearchCities(string userInput)
     {
         var request = new HttpRequestMessage()
         {
@@ -19,6 +20,7 @@ public class CitySearchService
         };
 
         request.Headers.Add("User-Agent", "my-pretty-weather-application");
+
         request.Headers.Add("Accept-Language", "ru");
 
         var response = await _httpClient.SendAsync(request);
@@ -28,21 +30,12 @@ public class CitySearchService
         return JsonSerializer.Deserialize<CitySearchResponse[]>(responseMessage);
     }
 
-    public string[] ShowCitiesForOutput(CitySearchResponse[] allCities)
+    public async Task<CitySearchResponse[]> ShowCitiesForOutput(string userInput)  
     {
-        CitySearchResponse[] availableCities = null;
+        var allCities = await SearchCities(userInput);
 
-        var groupOfCities = from CitySearchResponse in allCities group CitySearchResponse by CitySearchResponse.Type;
-
-        foreach (var element in groupOfCities)
-        {
-            if (element.Key is "city" or "town")
-            {
-                availableCities = element.ToArray();
-            }
-        }
-        return availableCities.Select(name => name.DisplayName).ToArray();
-    }
+        return allCities.Where(city => city.AdressType is "city" or "town" or "village").ToArray();
+	}
 }
 
     

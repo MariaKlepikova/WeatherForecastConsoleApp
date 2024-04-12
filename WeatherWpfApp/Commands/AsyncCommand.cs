@@ -8,7 +8,7 @@ using WeatherWpfApp.Commands.TaskUtilities;
 
 namespace WeatherWpfApp.Commands
 {
-	interface IAsyncCommand : ICommand
+	public interface IAsyncCommand : ICommand
 	{
 		Task ExecuteAsync();
 		bool CanExecute();

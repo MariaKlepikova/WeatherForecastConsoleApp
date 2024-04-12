@@ -30,22 +30,64 @@
                         Width="auto" Height="auto">
 
                 <Button
-                        Width="27" Height="27" 
-                        Margin="25,9,5,9" 
-                        Command="{Binding ClickCommand}"
+                        Width="27" Height="27" HorizontalAlignment="Stretch"
+                        Margin="15,9,5,9" 
+                        Command="{Binding SearchCitiesCommand}" 
                         BorderBrush="White">
                     <Button.Background>
                         <ImageBrush ImageSource="/Images/search.png"/>
                     </Button.Background>
                     <!--Content="{Binding ClickContent}"-->
                 </Button>
-                <TextBox Height="30" MinWidth="200" BorderBrush="Gray"
-                         Margin="9,9,9,9" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
-                         FontSize="18" Foreground="DimGray"
-                         Text="Поиск">
-                </TextBox>
+
+                <StackPanel>
+                    <TextBox x:Name="UserInputTextBox"
+                             Height="30" MinWidth="220" BorderBrush="Gray"
+                             Margin="9,3,9,0" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                             FontSize="18" Foreground="DimGray"
+                             Text="{Binding Path=CityNameInput, Mode=TwoWay}">
+                        <!--<TextBox.InputBindings>
+                            <KeyBinding Command="{Binding }" Key="Enter" />
+                        </TextBox.InputBindings>-->
+                    </TextBox>
+                    <ComboBox MinWidth="200"
+                              Margin="9,0,9,25"
+                              ItemsSource="{Binding Path=AvailableCitiesForDropdownForDropdown, Mode=TwoWay}"
+                              SelectedItem="{Binding Path=SelectedCityFromDropdown, Mode=TwoWay}"
+                              >
+                    </ComboBox>
+
+                </StackPanel>
+
             </StackPanel>
+
         </Border>
+
+       <!--<Grid Grid.Row="0" Grid.Column="1">
+           <Grid.ColumnDefinitions>
+               <ColumnDefinition/>
+               <ColumnDefinition/>
+           </Grid.ColumnDefinitions>
+
+           <Border 
+               CornerRadius="15" Background="White" 
+               Grid.Column="0"
+               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+               BorderThickness="3" BorderBrush="Gray" Margin="16,16,16,8">
+
+               <Button
+                   Width="auto" Height="auto" HorizontalAlignment="Stretch"
+                   Margin="12" 
+                   Command="{Binding GetCurrentWeatherInSelectedCity}" 
+                   BorderBrush="Gray"
+                   Background="White">
+                   <TextBlock Text="Узнать погоду в этом городе" FontSize="20"/>
+
+               </Button>
+
+           </Border>
+
+        </Grid>-->
 
         <Border CornerRadius="15" Background="White"
                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch"

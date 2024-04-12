@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WeatherForecastLibrary.Models;
+using WeatherWpfApp.ViewModels;
 
 namespace WeatherWpfApp;
 

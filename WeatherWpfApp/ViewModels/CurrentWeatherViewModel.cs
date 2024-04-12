@@ -7,11 +7,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WeatherForecastLibrary;
 using WeatherForecastLibrary.Models;
+using WeatherForecastLibrary.Services;
 using WeatherWpfApp.Commands;
+using WeatherWpfApp.Commands.TaskUtilities;
 
 namespace WeatherWpfApp.ViewModels
 {
-	public class CurrentWeatherViewModel : INotifyPropertyChanged 
+	public class CurrentWeatherViewModel : INotifyPropertyChanged
 	{
 		/*
 		 *   1. беру инпут значения из пропертей вьюмодели
@@ -21,21 +23,25 @@ namespace WeatherWpfApp.ViewModels
 		 *   4. Из полученного ответа заполняю проперти вьюмодели, чтобы значения отобразились на вью
 		 */
 
-		private readonly Dictionary<Precipitation, WeatherType> _weatherIcons; 
+		private readonly CitySearchService _citySearchService;
+		private readonly Dictionary<Precipitation, WeatherType> _weatherIcons;
 
-		public CurrentWeatherViewModel()
+		public CurrentWeatherViewModel(CitySearchService citySearchService)
 		{
-			ClickCommand = new LambdaCommand(
-				new Action<object>(param => OnClickExecuted(param)),
-				new Func<object, bool>(param => CanClickExecute(param))
-			);
+			_citySearchService = citySearchService;
+
+			SearchCitiesCommand = new AsyncCommand(
+				OnCommandExecuteSearchCities,
+				() => true);
 
 			_weatherIcons = new Dictionary<Precipitation, WeatherType>()
 			{
-				{ 
+				{
 					Precipitation.Clearly, new WeatherType()
 					{
-						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\001-sunny.png", UriKind.Absolute)),
+						IconSource =
+							new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\001-sunny.png",
+								UriKind.Absolute)),
 						TextDescription = "ясно"
 					}
 				},
@@ -43,7 +49,9 @@ namespace WeatherWpfApp.ViewModels
 				{
 					Precipitation.Cloudy, new WeatherType()
 					{
-						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\002-cloudy.png", UriKind.Absolute)),
+						IconSource =
+							new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\002-cloudy.png",
+								UriKind.Absolute)),
 						TextDescription = "облачно"
 					}
 				},
@@ -51,7 +59,9 @@ namespace WeatherWpfApp.ViewModels
 				{
 					Precipitation.PartlyCloudy, new WeatherType()
 					{
-						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\003-cloudy-1.png", UriKind.Absolute)),
+						IconSource =
+							new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\003-cloudy-1.png",
+								UriKind.Absolute)),
 						TextDescription = "облачно с прояснениями"
 					}
 				},
@@ -59,7 +69,9 @@ namespace WeatherWpfApp.ViewModels
 				{
 					Precipitation.Rain, new WeatherType()
 					{
-						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\004-rainy-day.png", UriKind.Absolute)),
+						IconSource =
+							new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\004-rainy-day.png",
+								UriKind.Absolute)),
 						TextDescription = "небольшой дождь"
 					}
 				},
@@ -67,7 +79,9 @@ namespace WeatherWpfApp.ViewModels
 				{
 					Precipitation.Shower, new WeatherType()
 					{
-						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\005-rainy-day-1.png", UriKind.Absolute)),
+						IconSource =
+							new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\005-rainy-day-1.png",
+								UriKind.Absolute)),
 						TextDescription = "ливень"
 					}
 				},
@@ -75,7 +89,8 @@ namespace WeatherWpfApp.ViewModels
 				{
 					Precipitation.Snow, new WeatherType()
 					{
-						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\006-snow.png", UriKind.Absolute)),
+						IconSource = new BitmapImage(new Uri("D:\\Машулька\\Downloads\\mycollection\\png\\006-snow.png",
+							UriKind.Absolute)),
 						TextDescription = "снег"
 					}
 				},
@@ -227,27 +242,63 @@ namespace WeatherWpfApp.ViewModels
 			}
 		}
 
-		private string _clickContent;
-		public string ClickContent
+		private string _cityNameInput;
+
+		public string CityNameInput
 		{
-			get { return _clickContent; }
+			get { return _cityNameInput; }
 			set
 			{
-				_clickContent = value;
-				OnPropertyChanged(nameof(ClickContent));
+				_cityNameInput = value;
+				OnPropertyChanged(nameof(CityNameInput));
 			}
 		}
 
-		public ICommand ClickCommand { get; }
 
+		private CitySearchResponse[] CurrentCitiesCache { get; set; }
 
-		private Random Rnd { get; } = new Random();
-		private void OnClickExecuted(object sender)
+		private string[] _availableCitiesForDropdown;
+
+		public string[] AvailableCitiesForDropdownForDropdown
 		{
-			ClickContent = Rnd.Next().ToString();
+			get { return _availableCitiesForDropdown; }
+			set
+			{
+				_availableCitiesForDropdown = value;
+				OnPropertyChanged(nameof(AvailableCitiesForDropdownForDropdown));
+			}
 		}
 
-		private bool CanClickExecute(object sender) => true;
+		private string _selectedCityFromDropdown;
+
+		public string SelectedCityFromDropdown
+		{
+			get { return _selectedCityFromDropdown; }
+			set
+			{
+				//CityNameInput = value;
+
+				if (value != null)
+				{
+					_ = ChangeWeatherForecastByCityName(value);
+				}
+
+				_selectedCityFromDropdown = value;
+				OnPropertyChanged(nameof(SelectedCityFromDropdown));
+			}
+		}
+
+		private async Task ChangeWeatherForecastByCityName(string selectedCityName)
+		{
+			var selectedCity = CurrentCitiesCache.FirstOrDefault(city => city.DisplayName == selectedCityName);
+
+			NameOfCity = selectedCity.Name;
+
+			var valueLatitude = selectedCity.Latitude;
+			var valueLongitude = selectedCity.Longitude;
+
+			InitializeProperties(valueLatitude, valueLongitude);
+		}
 
 		public async void Initialize()
 		{
@@ -258,6 +309,11 @@ namespace WeatherWpfApp.ViewModels
 			var valueLatitude = "59.9386";
 			var valueLongitude = "30.3141";
 
+			InitializeProperties(valueLatitude, valueLongitude);
+		}
+
+		private async void InitializeProperties(string valueLatitude, string valueLongitude) 
+		{
 			var weatherApiClient = new WeatherApiClient();
 
 			var currentWeather = await weatherApiClient.GetCurrentForecast(valueLatitude, valueLongitude);
@@ -265,11 +321,11 @@ namespace WeatherWpfApp.ViewModels
 
 			Temperature = currentWeather.CurrentForecast.Temperature.ToString("#0 '°C'");
 
-			PrecipitationProbability = dailyWeather.DailyForecast.PrecipitationProbability[0].ToString("##");
+			PrecipitationProbability = dailyWeather.DailyForecast.PrecipitationProbability[0].ToString("#0");
 
-			MaxTemperature = dailyWeather.DailyForecast.MaxTemperature[0].ToString("## '°C'");
+			MaxTemperature = dailyWeather.DailyForecast.MaxTemperature[0].ToString("#0 '°C'");
 
-			MinTemperature = dailyWeather.DailyForecast.MinTemperature[0].ToString("## '°C'");
+			MinTemperature = dailyWeather.DailyForecast.MinTemperature[0].ToString("#0 '°C'");
 
 			WindSpeed = currentWeather.CurrentForecast.WindSpeed.ToString("##,# м/с");
 
@@ -286,6 +342,19 @@ namespace WeatherWpfApp.ViewModels
 			WeatherIcon = currentWeatherType.IconSource;
 
 			TextDescription = currentWeatherType.TextDescription;
+		}
+
+		public IAsyncCommand SearchCitiesCommand { get; }
+
+		private async Task OnCommandExecuteSearchCities()
+		{
+			var userInput = CityNameInput;
+
+			CurrentCitiesCache = await _citySearchService.ShowCitiesForOutput(userInput);
+
+			AvailableCitiesForDropdownForDropdown = CurrentCitiesCache.Select(names => names.DisplayName).ToArray();
+
+			SelectedCityFromDropdown = AvailableCitiesForDropdownForDropdown.FirstOrDefault();
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged; 

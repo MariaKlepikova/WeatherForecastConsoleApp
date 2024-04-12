@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppWeatherForecast",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherForecastLibrary", "WeatherForecastLibrary\WeatherForecastLibrary.csproj", "{9ABF441C-081A-4AD2-9C60-7232E9A20A9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherWpfApp", "WeatherWpfApp\WeatherWpfApp.csproj", "{82BA5D6D-B06D-4E04-918D-309BDA598962}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9ABF441C-081A-4AD2-9C60-7232E9A20A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ABF441C-081A-4AD2-9C60-7232E9A20A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ABF441C-081A-4AD2-9C60-7232E9A20A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82BA5D6D-B06D-4E04-918D-309BDA598962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82BA5D6D-B06D-4E04-918D-309BDA598962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82BA5D6D-B06D-4E04-918D-309BDA598962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82BA5D6D-B06D-4E04-918D-309BDA598962}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

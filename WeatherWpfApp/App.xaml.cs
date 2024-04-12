@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using WeatherForecastLibrary.Services;
 using WeatherWpfApp.ViewModels;
 
 namespace WeatherWpfApp;
@@ -14,7 +15,9 @@ public partial class App : Application
 	{
 		base.OnStartup(e);
 
-		var currentWeatherViewModel = new CurrentWeatherViewModel();
+		var cityService = new CitySearchService();
+		
+		var currentWeatherViewModel = new CurrentWeatherViewModel(cityService);
 
 		currentWeatherViewModel.Initialize();
 

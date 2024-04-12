@@ -9,8 +9,8 @@ public class CitySearchResponse
     [JsonPropertyName("lon")]
     public string Longitude { get; set; } 
     
-    [JsonPropertyName("type")]
-    public string Type { get; set; }
+    [JsonPropertyName("addresstype")]
+    public string AdressType { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
